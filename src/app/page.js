@@ -1,95 +1,94 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client'
+
+import styles from './page.module.css'
+import { useState, useEffect } from 'react'
+import { Box, TextField, InputLabel, MenuItem, FormControl, Select } from '@mui/material';
+import Button from '@mui/material/Button';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { Line } from 'react-chartjs-2';
+import Chart from 'chart.js/auto';
+
+
+const historicalRates = [
+  { year: 1992, rate: 15.23 },
+  { year: 1995, rate: 16.12 },
+
+]
 
 export default function Home() {
+  const [fromCurrency, setFromCurrency] = useState('AED');
+  const [toCurrency, setToCurrency] = useState('INR');
+  const [setAmount] = useState(1);
+
+  const chartData = {
+    labels: historicalRates.map((rate) => rate.year),
+    datasets: [
+      {
+        label: 'Exchange Rate',
+        data: historicalRates.map((rate) => rate.rate),
+        fill: false,
+        borderColor: 'rgba(75,192,192,1)',
+      },
+    ],
+  };
+
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
+    <div class="contenedor">
+      <div class="rectangulo">
+        <main className={styles.main}>
+          <h1 className={styles.title}>CONVERSOR DE DIVISAS</h1>
+
+
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, marginLeft: '30px' }}>
+            <TextField
+              label="Moneda"
+              type="tex"
+              onChange={(e) => setAmount(parseFloat(e.target.value))}
+              sx={{ mr: 2 }}
             />
-          </a>
-        </div>
-      </div>
+            <TextField
+              label="Resultado"
+              type="tex"
+              onChange={(e) => setAmount(parseFloat(e.target.value))}
+              sx={{ mr: 2 }}
+            />
+          </Box>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel id="from-currency-label"></InputLabel>
+              <Select
+                labelId="from-currency-label"
+                value={fromCurrency}
+                onChange={(e) => setFromCurrency(e.target.value)}
+              >
+                <MenuItem value="AED">AED</MenuItem>
+              </Select>
+            </FormControl>
+            <ArrowForwardIcon />
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel id="to-currency-label"></InputLabel>
+              <Select
+                labelId="to-currency-label"
+                value={toCurrency}
+                onChange={(e) => setToCurrency(e.target.value)}
+              >
+                <MenuItem value="INR">INR</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+          <Button sx={{ width: '450px', backgroundColor: '#401F71', marginLeft: '30px' }} variant="contained" disableElevation>
+            Result
+          </Button>
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+            <Box sx={{ width: '80%', maxWidth: 600 }}>
+              <Line data={chartData} />
+            </Box>
+          </Box>
+        </main>
+      </div >
+    </div >
+  )
 }
